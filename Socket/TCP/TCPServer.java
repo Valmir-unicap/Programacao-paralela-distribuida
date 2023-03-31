@@ -4,39 +4,35 @@ import java.io.*;
 import java.net.*;
 
 class TCPServer {
-
     public static void main(String args[]) throws Exception {
-        String clientSentence;
-
-        String capitalizedSentence;
-
+        // Cria um objeto ServerSocket na porta 6789
         ServerSocket welcomeSocket = new ServerSocket(6789);
+        System.out.println("Servidor iniciado");
 
-        System.out.println("Conecção inicializada!");
-
-        System.out.println("ponto 1 ");
-
+        // Aguarda a conexão de clientes indefinidamente
         while (true) {
+            // Aguarda a conexão de um cliente e cria um novo objeto Socket para lidar com ele
             Socket connectionSocket = welcomeSocket.accept();
-            System.out.println("ponto 2");
-            BufferedReader inFromClient = new BufferedReader(
-                    new InputStreamReader(
-                            connectionSocket.getInputStream()
-                    )
-            );
-            DataOutputStream outToClient = new DataOutputStream(
-                    connectionSocket.getOutputStream()
-            );
+            System.out.println("Cliente conectado: " + connectionSocket);
 
-            System.out.println("ponto 3");
-            clientSentence = inFromClient.readLine();
+            // Cria os streams de entrada e saída para o Socket
+            BufferedReader inFromClient = new BufferedReader(new InputStreamReader(connectionSocket.getInputStream()));
+            DataOutputStream outToClient = new DataOutputStream(connectionSocket.getOutputStream());
 
-            System.out.println("ponto 4");
-            capitalizedSentence = clientSentence.toUpperCase() + '\n';
+            // Lê a mensagem enviada pelo cliente
+            String clientSentence = inFromClient.readLine();
+            System.out.println("Mensagem recebida do cliente: " + clientSentence);
+
+            // Converte a mensagem para maiúsculas
+            String capitalizedSentence = clientSentence.toUpperCase() + '\n';
+
+            // Envia a mensagem em maiúsculas de volta para o cliente
             outToClient.writeBytes(capitalizedSentence);
-            connectionSocket.close();
+            System.out.println("Mensagem enviada para o cliente: " + capitalizedSentence);
 
-            System.out.println("Conecção finalizada!");
+            // Fecha o Socket para este cliente
+            connectionSocket.close();
+            System.out.println("Cliente desconectado: " + connectionSocket);
         }
     }
 }
