@@ -19,7 +19,7 @@ class UDPClient {
         byte[] sendData = new byte[1024];
         byte[] receiveData = new byte[1024];
 
-        System.out.println("Digite o texto a ser enviado ao servidor: ");
+        System.out.print("Digite o texto a ser enviado ao servidor: ");
         String sentence = inFromUser.readLine();
         sendData = sentence.getBytes();
         DatagramPacket sendPacket = new DatagramPacket(sendData,
@@ -39,6 +39,7 @@ class UDPClient {
 
         System.out.println("Texto recebido do servidor:" + modifiedSentence);
         clientSocket.close();
+
         System.out.println("Socket cliente fechado!");
     }
 }
