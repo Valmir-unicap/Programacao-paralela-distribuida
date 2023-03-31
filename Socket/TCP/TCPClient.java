@@ -1,42 +1,40 @@
-package com.company;
-
 import java.io.*;
 import java.net.*;
 
-class TCPServer {
+class TCPClient {
 
     public static void main(String args[]) throws Exception {
-        String clientSentence;
+        String sentence;
 
-        String capitalizedSentence;
+        String modifiedSentence;
 
-        ServerSocket welcomeSocket = new ServerSocket(6789);
+        BufferedReader inFromUser = new BufferedReader(new InputStreamReader(
+                System.in));
 
-        System.out.println("Conecção inicializada!");
+        int porta = 6789;
 
-        System.out.println("ponto 1 ");
+        String servidor = "localhost";
 
-        while (true) {
-            Socket connectionSocket = welcomeSocket.accept();
-            System.out.println("ponto 2");
-            BufferedReader inFromClient = new BufferedReader(
-                    new InputStreamReader(
-                            connectionSocket.getInputStream()
-                    )
-            );
-            DataOutputStream outToClient = new DataOutputStream(
-                    connectionSocket.getOutputStream()
-            );
+        System.out.println("Conectando ao servidor " + servidor + ":" + porta);
 
-            System.out.println("ponto 3");
-            clientSentence = inFromClient.readLine();
+        Socket clientSocket = new Socket(servidor, porta);
 
-            System.out.println("ponto 4");
-            capitalizedSentence = clientSentence.toUpperCase() + '\n';
-            outToClient.writeBytes(capitalizedSentence);
-            connectionSocket.close();
+        DataOutputStream outToServer = new DataOutputStream(clientSocket
+                .getOutputStream());
 
-            System.out.println("Conecção finalizada!");
-        }
+        BufferedReader inFromServer = new BufferedReader(new InputStreamReader(
+                clientSocket.getInputStream()));
+
+        System.out.println("Digite o conteúdo a ser enviada para o servidor: ");
+        sentence = inFromUser.readLine();
+
+        outToServer.writeBytes(sentence + '\n');
+
+        modifiedSentence = inFromServer.readLine();
+
+        System.out.println("Recebido do servidor: " + modifiedSentence);
+
+        clientSocket.close();
+
     }
 }
