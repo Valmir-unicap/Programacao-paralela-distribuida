@@ -8,13 +8,14 @@ class UDPServer {
 
         int porta = 9876;
         int numConn = 1;
+        int contador = 0;
 
         DatagramSocket serverSocket = new DatagramSocket(porta);
 
         byte[] receiveData = new byte[1024];
         byte[] sendData = new byte[1024];
 
-        while (true) {
+        while (contador == 0) {
 
             DatagramPacket receivePacket = new DatagramPacket(receiveData,
                     receiveData.length);
@@ -23,6 +24,7 @@ class UDPServer {
             System.out.print("Datagrama UDP [" + numConn + "] recebido...");
 
             String sentence = new String(receivePacket.getData());
+
             System.out.println(sentence);
 
             InetAddress IPAddress = receivePacket.getAddress();
@@ -36,10 +38,13 @@ class UDPServer {
             DatagramPacket sendPacket = new DatagramPacket(sendData,
                     sendData.length, IPAddress, port);
 
-            System.out.print("Enviando " + capitalizedSentence + "...");
+            System.out.println("Enviando " + capitalizedSentence + "...");
 
             serverSocket.send(sendPacket);
-            System.out.println("OK\n");
+
+            System.out.println("Socket server fechado!");
+            
+            contador++;
         }
     }
 }
