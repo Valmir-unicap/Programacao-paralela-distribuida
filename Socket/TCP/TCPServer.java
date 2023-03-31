@@ -16,9 +16,8 @@ class TCPServer {
 
         System.out.println("ponto 1 ");
 
-        Socket connectionSocket = welcomeSocket.accept();
-
         while (true) {
+            Socket connectionSocket = welcomeSocket.accept();
             System.out.println("ponto 2");
             BufferedReader inFromClient = new BufferedReader(
                     new InputStreamReader(
