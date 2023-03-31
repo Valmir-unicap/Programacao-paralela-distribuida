@@ -23,7 +23,7 @@ class TCPClient {
         BufferedReader inFromServer = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
 
         // Lê uma mensagem do usuário a partir do console
-        System.out.println("Digite a mensagem a ser enviada para o servidor:");
+        System.out.println("Digite a mensagem a ser enviada para o servidor: ");
         String sentence = inFromUser.readLine();
 
         // Envia a mensagem ao servidor através do Socket
