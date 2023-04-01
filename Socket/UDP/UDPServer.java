@@ -8,14 +8,19 @@ class UDPServer {
     private static final int NUM_CONN = 1;
 
     public static void main(String[] args) {
+        
         try (DatagramSocket serverSocket = new DatagramSocket(PORTA)) {
             byte[] receiveData = new byte[1024];
             byte[] sendData = new byte[1024];
 
             while (true) {
+
                 DatagramPacket receivePacket = new DatagramPacket(receiveData, receiveData.length);
+
+                System.out.println("Socket server iniciado!");
+
                 serverSocket.receive(receivePacket);
-                System.out.println("Datagrama UDP [" + NUM_CONN + "] recebido...");
+                System.out.print("Datagrama UDP [" + NUM_CONN + "] recebido...");
 
                 String sentence = new String(receivePacket.getData(), 0, receivePacket.getLength());
 
