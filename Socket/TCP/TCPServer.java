@@ -9,36 +9,40 @@ class TCPServer {
         int contador = 0;
 
         // Cria um objeto ServerSocket na porta 6789
-        ServerSocket welcomeSocket = new ServerSocket(6789);
-        System.out.println("Servidor iniciado");
+        final int PORTA = 6789;
+        ServerSocket servidorSocket = new ServerSocket(PORTA);
+        System.out.println("Socket servidor iniciada!");
+        System.out.println("Servidor iniciado na porta = " + PORTA);
 
         // Aguarda a conexão de clientes indefinidamente
         while (contador == 0) {
+
             // Aguarda a conexão de um cliente e cria um novo objeto Socket para lidar com ele
-            Socket connectionSocket = welcomeSocket.accept();
-            System.out.println("Cliente conectado: " + connectionSocket);
+            Socket socketCliente = servidorSocket.accept();
+            System.out.println("Cliente conectado: " + socketCliente);
 
             // Cria os streams de entrada e saída para o Socket
-            BufferedReader inFromClient = new BufferedReader(new InputStreamReader(connectionSocket.getInputStream()));
-            DataOutputStream outToClient = new DataOutputStream(connectionSocket.getOutputStream());
+            BufferedReader entradaDoCliente = new BufferedReader(new InputStreamReader(socketCliente.getInputStream()));
+            DataOutputStream saidaParaCliente = new DataOutputStream(socketCliente.getOutputStream());
 
             // Lê a mensagem enviada pelo cliente
-            String clientSentence = inFromClient.readLine();
-            System.out.println("Mensagem recebida do cliente: " + clientSentence);
+            String mensagemDoCliente = entradaDoCliente.readLine();
+            System.out.println("Mensagem recebida do cliente: " + mensagemDoCliente);
 
             // Converte a mensagem para maiúsculas
-            String capitalizedSentence = clientSentence.toUpperCase() + '\n';
+            String mensagemEmMaiusculas = mensagemDoCliente.toUpperCase() + '\n';
 
             // Envia a mensagem em maiúsculas de volta para o cliente
-            outToClient.writeBytes(capitalizedSentence);
-            System.out.println("Mensagem enviada para o cliente: " + capitalizedSentence);
+            saidaParaCliente.writeBytes(mensagemEmMaiusculas);
+            System.out.println("Mensagem enviada para o cliente: " + mensagemEmMaiusculas);
 
             // Fecha o Socket para este cliente
-            connectionSocket.close();
-            System.out.println("Cliente desconectado: " + connectionSocket);
-            welcomeSocket.close();
-            System.out.println("Servidor desconectado: " + welcomeSocket);
-
+            socketCliente.close();
+            System.out.println("Cliente desconectado: " + socketCliente);
+            servidorSocket.close();
+            System.out.println("Servidor desconectado: " + servidorSocket);
+            System.out.println("");
+            System.out.println("Socket servidor finalizada!");
             contador++;
         }
     }
