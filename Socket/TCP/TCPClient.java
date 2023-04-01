@@ -5,6 +5,7 @@ import java.net.*;
 
 class TCPClient {
     public static void main(String args[]) throws Exception {
+        
         // Cria um BufferedReader para ler entradas do usuário a partir do console
         BufferedReader inFromUser = new BufferedReader(new InputStreamReader(System.in));
 
@@ -12,7 +13,9 @@ class TCPClient {
         int porta = 6789;
         String servidor = "localhost";
 
-        System.out.println("Conectando ao servidor " + servidor + ":" + porta);
+        System.out.println("Socket cliente iniciada!");
+
+        System.out.println("Conectando ao servidor " + servidor + ": " + porta);
 
         // Cria um novo objeto Socket para se conectar ao servidor
         Socket clientSocket = new Socket(servidor, porta);
@@ -24,7 +27,7 @@ class TCPClient {
         BufferedReader inFromServer = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
 
         // Lê uma mensagem do usuário a partir do console
-        System.out.print("Digite a mensagem a ser enviada para o servidor:");
+        System.out.print("Digite a mensagem a ser enviada para o servidor: ");
         String sentence = inFromUser.readLine();
 
         // Envia a mensagem ao servidor através do Socket
@@ -36,5 +39,6 @@ class TCPClient {
 
         // Fecha o Socket do cliente
         clientSocket.close();
+        System.out.println("Socket cliente finalizada!");
     }
 }
