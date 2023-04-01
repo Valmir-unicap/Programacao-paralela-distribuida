@@ -1,50 +1,40 @@
 package com.company;
 
-import java.io.*;
+import java.io.IOException;
 import java.net.*;
 
 class UDPServer {
-    public static void main(String args[]) throws Exception {
+    private static final int PORTA = 9876;
+    private static final int NUM_CONN = 1;
 
-        int porta = 9876;
-        int numConn = 1;
-        int contador = 0;
+    public static void main(String[] args) {
+        try (DatagramSocket serverSocket = new DatagramSocket(PORTA)) {
+            byte[] receiveData = new byte[1024];
+            byte[] sendData = new byte[1024];
 
-        DatagramSocket serverSocket = new DatagramSocket(porta);
+            while (true) {
+                DatagramPacket receivePacket = new DatagramPacket(receiveData, receiveData.length);
+                serverSocket.receive(receivePacket);
+                System.out.println("Datagrama UDP [" + NUM_CONN + "] recebido...");
 
-        byte[] receiveData = new byte[1024];
-        byte[] sendData = new byte[1024];
+                String sentence = new String(receivePacket.getData(), 0, receivePacket.getLength());
 
-        while (contador == 0) {
+                System.out.println(sentence);
 
-            DatagramPacket receivePacket = new DatagramPacket(receiveData,
-                    receiveData.length);
-            System.out.println("Esperando por datagrama UDP na porta " + porta);
-            serverSocket.receive(receivePacket);
-            System.out.print("Datagrama UDP [" + numConn + "] recebido...");
+                InetAddress ipAddress = receivePacket.getAddress();
+                int port = receivePacket.getPort();
 
-            String sentence = new String(receivePacket.getData());
+                String capitalizedSentence = sentence.toUpperCase();
+                sendData = capitalizedSentence.getBytes();
 
-            System.out.println(sentence);
+                DatagramPacket sendPacket = new DatagramPacket(sendData, sendData.length, ipAddress, port);
+                serverSocket.send(sendPacket);
 
-            InetAddress IPAddress = receivePacket.getAddress();
-
-            int port = receivePacket.getPort();
-
-            String capitalizedSentence = sentence.toUpperCase();
-
-            sendData = capitalizedSentence.getBytes();
-
-            DatagramPacket sendPacket = new DatagramPacket(sendData,
-                    sendData.length, IPAddress, port);
-
-            System.out.println("Enviando " + capitalizedSentence + "...");
-
-            serverSocket.send(sendPacket);
-
-            System.out.println("Socket server fechado!");
-            
-            contador++;
+                System.out.println("Enviando " + capitalizedSentence + "...");
+                System.out.println("Socket server fechado!");
+            }
+        } catch (IOException e) {
+            System.out.println("Erro ao criar ou fechar o DatagramSocket: " + e.getMessage());
         }
     }
 }
